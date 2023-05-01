@@ -1,7 +1,18 @@
 import os
-import requests
+import base64
+import weaviate
 
-def send_images_to_api(folder_path, api_url):
+client = weaviate.Client("http://localhost:8080")
+
+def set_up_batch():
+   client.batch.configure(
+       batch_size=100,
+       dynamic=True,
+       timeout_retries=3,
+       callback=None,
+   )
+
+def read_and_encode_images(folder_path):
     # List all files in the folder
     image_files = [os.path.join(folder_path, f) for f in os.listdir(folder_path)]
 
@@ -9,21 +20,21 @@ def send_images_to_api(folder_path, api_url):
         with open(image_file, "rb") as f:
             file_data = f.read()
 
-        # Send the image file to the REST API using a POST request
-        response = requests.post(
-            api_url,
-            files={"image": (os.path.basename(image_file), file_data)},
-        )
+        # Encode the image file as base64
+        encoded_image = base64.b64encode(file_data).decode("utf-8")
 
-        if response.status_code == 200:
-            print(f"Successfully uploaded {image_file}: {response.json()}")
-        else:
-            print(f"Failed to upload {image_file}: {response.status_code} {response.text}")
+        client.data_object.create(
+            class_name = "Animals",
+            data_object = {
+                "image": encoded_image,
+                "text": "A random image"
+            }
+    )
 
 def main():
-    folder_path = "images"
-    api_url = "http://localhost:5000/store"
-    send_images_to_api(folder_path, api_url)
+    folder_path = "/images"
+    set_up_batch()
+    read_and_encode_images(folder_path)
 
 if __name__ == "__main__":
     main()

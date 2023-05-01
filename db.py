@@ -1,6 +1,6 @@
 import weaviate
 
-client = weaviate.Client("http://localhost:8080")  # Replace the URL with that of your Weaviate instance
+client = weaviate.Client("http://localhost:8080")
 
 schema_config = {
     'class': 'Animals',
@@ -33,12 +33,3 @@ except Exception as e:
     print(e)
 
 
-
-#encode image to base64 and store it in the database
-def store_image(image):
-    client.data_object.create(
-        class_name="Animal",data_object=   {
-                "image": image.read(),
-                "text": "A random image"
-            }
-    )
