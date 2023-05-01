@@ -6,9 +6,15 @@ app = Flask(__name__)
 api = Api(app)
 
 class RESTApi(Resource):
-    def get(self):
-        return jsonify(message="GET request received")
+    def post(self):
+        if 'image' not in request.files:
+            return jsonify(message="No image file found")
+        image = request.files['image']
+        print(image)
+        return jsonify(message="POST request received")
 
+
+class StoreApi(Resource):
     def post(self):
         if 'image' not in request.files:
             return jsonify(message="No image file found")
@@ -16,13 +22,8 @@ class RESTApi(Resource):
         db.store_image(image)
         return jsonify(message="POST request received")
 
-    def put(self):
-        return jsonify(message="PUT request received")
-
-    def delete(self):
-        return jsonify(message="DELETE request received")
-
 api.add_resource(RESTApi, '/api')
+api.add_resource(StoreApi, '/store')
 
 if __name__ == '__main__':
     app.run(debug=True)

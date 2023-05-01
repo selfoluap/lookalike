@@ -3,7 +3,7 @@ import weaviate
 client = weaviate.Client("http://localhost:8080")  # Replace the URL with that of your Weaviate instance
 
 schema_config = {
-    'class': 'Animal',
+    'class': 'Animals',
     'vectorizer': 'img2vec-neural',
     'vectorIndexType': 'hnsw',
     'moduleConfig': {
@@ -27,7 +27,7 @@ schema_config = {
 
 #try adding the schema and receive the schemas and if error occurs, print the error message
 try:
-    client.schema.create(schema_config)
+    client.schema.create({"classes": [schema_config]})
     print(client.schema.get())
 except Exception as e:
     print(e)
