@@ -24,8 +24,8 @@ def process_images(input_folder, output_folder):
                 encode_and_save_image(image_path, output_folder, output_filename)
 
 def main():
-    input_folder = "/images"
-    output_folder = "/b64_images"
+    input_folder = "images"
+    output_folder = "b64_images"
     process_images(input_folder, output_folder)
 
 if __name__ == "__main__":
