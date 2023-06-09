@@ -21,6 +21,8 @@ services:
       DEFAULT_VECTORIZER_MODULE: 'img2vec-neural'
       ENABLE_MODULES: 'img2vec-neural'
       CLUSTER_HOSTNAME: 'node1'
+    volumes:
+      - /var/weaviate:/var/lib/weaviate
   i2v-neural:
     image: semitechnologies/img2vec-pytorch:resnet50
     environment:
